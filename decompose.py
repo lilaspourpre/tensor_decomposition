@@ -13,10 +13,10 @@ def parse_arguments():
     parser = argparse.ArgumentParser("Tensor decomposition using PARAFAC/TUCKER")
     parser.add_argument("-i", "--input_path", dest="input_path", required=True)
     parser.add_argument("-o", "--output_path", dest="output_path", required=False)
-    parser.add_argument("-e", "--embedding_size", dest="embedding_size", default=50)
+    parser.add_argument("-e", "--embedding_size", type=int, dest="embedding_size", default=50)
     parser.add_argument('-a', '--algorithm', dest='algorithm', choices=['parafac', 'tucker'], default='parafac')
-    parser.add_argument('-m', '--min_count', dest='min_count', default=5)
-    parser.add_argument('-n', "--first_n", dest='first_n', default=1000,
+    parser.add_argument('-m', '--min_count', type=int, dest='min_count', default=5)
+    parser.add_argument('-n', "--first_n", type=int, dest='first_n', default=1000,
                         help="number of lines to cut (use not all dataset)")
     return parser.parse_args()
 
@@ -48,7 +48,7 @@ def main():
     large_tensor = create_tensor(lines, verb2id, subject2id, object2id)
 
     if args.algorithm == 'tucker':
-        weights, factors = partial_tucker(large_tensor, modes=[0, 1, 2], rank=args.embedding_size, init='svd')
+        weights, factors = partial_tucker(large_tensor, modes=[0, 1, 2], rank=args.embedding_size, init='random')
     else:
         weights, factors = parafac(large_tensor, rank=args.embedding_size, init='random')
 

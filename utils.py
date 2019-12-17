@@ -1,5 +1,7 @@
 import gzip
-from nltk.corpus import stopwords
+
+with open('./data/english', 'r', encoding='utf-8') as f:
+    STOPWORDS = set(f.read().split('\n')[:-1])
 
 
 def get_dict_and_samples(filename: str, min_count: int, first_n: int) -> tuple:
@@ -26,4 +28,4 @@ def get_dict_and_samples(filename: str, min_count: int, first_n: int) -> tuple:
 
 
 def is_valid(word: str):
-    return len(word) > 1 and word.isalnum() and word not in stopwords.words('english')
+    return len(word) > 1 and word.isalnum() and word not in STOPWORDS
