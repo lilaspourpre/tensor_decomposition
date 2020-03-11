@@ -15,6 +15,8 @@ def parse_arguments():
     parser.add_argument('-m', '--min_count', dest='min_count', default=5)
     parser.add_argument('-n', "--first_n", dest='first_n', default=1000,
                         help="number of lines to cut (use not all dataset)")
+    parser.add_argument('-s', "--step", type=int, dest='step', default=1,
+                        help="step to use not every line (use not all dataset)")
     return parser.parse_args()
 
 
@@ -48,7 +50,7 @@ def group_result(indices: list, triplets: list) -> dict:
 def main():
     args = parse_arguments()
     verb2vec, subject2vec, object2vec = get_vectors(args.vector_path)
-    lines, _, _, _ = get_dict_and_samples(args.input_path, args.min_count, args.first_n)
+    lines, _, _, _ = get_dict_and_samples(args.input_path, args.min_count, args.first_n, args.step)
     concatenated = concat_vectors(lines, verb2vec, subject2vec, object2vec)
     print(f"Shape: {concatenated.shape}")
     ap = AffinityPropagation()

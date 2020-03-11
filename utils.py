@@ -4,7 +4,7 @@ with open('./data/english', 'r', encoding='utf-8') as f:
     STOPWORDS = set(f.read().split('\n')[:-1])
 
 
-def get_dict_and_samples(filename: str, min_count: int, first_n: int) -> tuple:
+def get_dict_and_samples(filename: str, min_count: int, first_n: int, step=1) -> tuple:
     subject_set = set()
     object_set = set()
     verb_set = set()
@@ -14,10 +14,12 @@ def get_dict_and_samples(filename: str, min_count: int, first_n: int) -> tuple:
         for line in gz:
             v, s, o, count = line.decode("utf-8")[:-1].split('\t')
             if float(count) > min_count and is_valid(s) and is_valid(o):
-                subject_set.add(s)
-                object_set.add(o)
-                verb_set.add(v)
-                lines.append((v, s, o))
+                print(len(lines) % step, len(lines))
+                if len(lines) % step == 0:
+                    subject_set.add(s)
+                    object_set.add(o)
+                    verb_set.add(v)
+                    lines.append((v, s, o))
             if len(lines) == first_n:
                 break
 
